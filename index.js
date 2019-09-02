@@ -49,6 +49,19 @@ server.get('/users/:id', (req, res) => {
     });
 });
 
+// delete a Hub
+
+server.delete('/users/:id', (req, res) => {
+  const userId = req.params.id;
+
+  Users.remove(userId)
+    .then(hub => {
+      res.status(200).json({ message: 'user deleted successfully' });
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'error removing the user' });
+    });
+});
 const port = 5000;
 
 server.listen(port, () => console.log('api running'));
