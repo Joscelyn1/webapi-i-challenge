@@ -8,7 +8,7 @@ const server = express();
 server.use(express.json());
 
 server.get('/', (req, res) => {
-  res.send('hello Joscelyn');
+  res.send('hello Joscelyn. Do you want to play a game?');
 });
 
 // see a list of users
@@ -19,7 +19,9 @@ server.get('/users', (req, res) => {
       res.status(200).json(users);
     })
     .catch(error => {
-      res.status(500).json({ message: 'error getting the list of users' });
+      res
+        .status(500)
+        .json({ error: 'The users information could not be retrieved.' });
     });
 });
 
@@ -30,10 +32,18 @@ server.post('/users', (req, res) => {
 
   Users.insert(userInformation)
     .then(user => {
-      res.status(200).json(user);
+      if (!userInformation.name || !userInformation.bio) {
+        res
+          .status(400)
+          .json({ errorMessage: 'Please provide name and bio for the user.' });
+      } else {
+        res.status(201).json(user);
+      }
     })
     .catch(error => {
-      res.status(500).json({ message: 'error adding the user' });
+      res.status(500).json({
+        message: 'There was an error while saving the user to the database'
+      });
     });
 });
 
@@ -42,10 +52,18 @@ server.get('/users/:id', (req, res) => {
   const userId = req.params.id;
   Users.findById(userId)
     .then(user => {
-      res.status(200).json(user);
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      } else {
+        res.status(200).json(user);
+      }
     })
     .catch(error => {
-      res.status(500).json({ message: 'error getting the specified user' });
+      res
+        .status(500)
+        .json({ message: 'The user information could not be retrieved.' });
     });
 });
 
@@ -55,11 +73,17 @@ server.delete('/users/:id', (req, res) => {
   const userId = req.params.id;
 
   Users.remove(userId)
-    .then(hub => {
-      res.status(200).json({ message: 'user deleted successfully' });
+    .then(user => {
+      if (!user) {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
+      } else {
+        res.status(200).json({ user });
+      }
     })
     .catch(error => {
-      res.status(500).json({ message: 'error removing the user' });
+      res.status(500).json({ message: 'The user could not be removed' });
     });
 });
 
@@ -69,14 +93,22 @@ server.put('/users/:id', (req, res) => {
 
   Users.update(id, changes)
     .then(updated => {
-      if (updated) {
-        res.status(200).json(updated);
+      if (!changes.name || !changes.bio) {
+        res
+          .status(400)
+          .json({ errorMessage: 'Please provide name and bio for the user.' });
+      } else if (!updated) {
+        res
+          .status(404)
+          .json({ message: 'The user with the specified ID does not exist.' });
       } else {
-        res.status(404).json({ message: 'user not found' });
+        res.status(200).json(updated);
       }
     })
     .catch(error => {
-      res.status(500).json({ message: 'error updating user' });
+      res
+        .status(500)
+        .json({ message: 'The user information could not be modified.' });
     });
 });
 
