@@ -62,6 +62,24 @@ server.delete('/users/:id', (req, res) => {
       res.status(500).json({ message: 'error removing the user' });
     });
 });
+
+server.put('/users/:id', (req, res) => {
+  const { id } = req.params;
+  const changes = req.body;
+
+  Users.update(id, changes)
+    .then(updated => {
+      if (updated) {
+        res.status(200).json(updated);
+      } else {
+        res.status(404).json({ message: 'user not found' });
+      }
+    })
+    .catch(error => {
+      res.status(500).json({ message: 'error updating user' });
+    });
+});
+
 const port = 5000;
 
 server.listen(port, () => console.log('api running'));
