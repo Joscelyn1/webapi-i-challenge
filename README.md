@@ -51,17 +51,17 @@ Users in the database conform to the following object structure:
 
 Inside `index.js` add the code necessary to implement the following _endpoints_:
 
-| Method | URL            | Description                                                                                                                       |
-| ------ | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
-| POST   | /api/users     | Creates a user using the information sent inside the `request body`.                                                              |
-| GET    | /api/users     | Returns an array of all the user objects contained in the database.                                                               |
-| GET    | /api/users/:id | Returns the user object with the specified `id`.                                                                                  |
-| DELETE | /api/users/:id | Removes the user with the specified `id` and returns the deleted user.                                                            |
-| PUT    | /api/users/:id | Updates the user with the specified `id` using data from the `request body`. Returns the modified document, **NOT the original**. |
+| Method   | URL            | Description                                                                                                                       |
+| -------- | -------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| x        | POST           | /api/users                                                                                                                        | Creates a user using the information sent inside the `request body`. |
+| x        | GET            | /api/users                                                                                                                        | Returns an array of all the user objects contained in the database. |
+| x        | GET            | /api/users/:id                                                                                                                    | Returns the user object with the specified `id`. |
+| x DELETE | /api/users/:id | Removes the user with the specified `id` and returns the deleted user.                                                            |
+| PUT      | /api/users/:id | Updates the user with the specified `id` using data from the `request body`. Returns the modified document, **NOT the original**. |
 
 #### Endpoint Specifications
 
-When the client makes a `POST` request to `/api/users`:
+X When the client makes a `POST` request to `/api/users`:
 
 - If the request body is missing the `name` or `bio` property:
 
@@ -80,14 +80,14 @@ When the client makes a `POST` request to `/api/users`:
   - respond with HTTP status code `500` (Server Error).
   - return the following JSON object: `{ error: "There was an error while saving the user to the database" }`.
 
-When the client makes a `GET` request to `/api/users`:
+X When the client makes a `GET` request to `/api/users`:
 
 - If there's an error in retrieving the _users_ from the database:
   - cancel the request.
   - respond with HTTP status code `500`.
   - return the following JSON object: `{ error: "The users information could not be retrieved." }`.
 
-When the client makes a `GET` request to `/api/users/:id`:
+X When the client makes a `GET` request to `/api/users/:id`:
 
 - If the _user_ with the specified `id` is not found:
 
